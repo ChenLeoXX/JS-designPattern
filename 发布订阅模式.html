@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>订阅发布模式</title>
+</head>
+<body>
+  <script>
+    /* 
+        实现一个发布订阅模式： on 订阅api， off 取消订阅api， trigger 触发api， once 执行后自行销毁api
+    */ 
+    var eventCenter = {
+      //事件池
+      eventPool:{},
+      oncePool:{},
+      on: function(topic,handler){
+          if(this.eventPool[topic]){
+            this.eventPool[topic].push(handler)
+          }else {
+            this.eventPool[topic] = [handler]
+          }
+      },
+      off:  function(topic,handler) {
+          if(this.eventPool[topic]){
+           let count = this.eventPool[topic].indexOf(handler)
+           this.eventPool[topic].splice(count,1)
+          }else{
+            return 
+          }
+      },
+      trigger: function(topic){
+         if(this.eventPool[topic]){
+           this.eventPool[topic].forEach((fn)=>{
+             fn()
+           })
+         }
+         if(this.oncePool[topic]){
+            this.oncePool[topic].forEach((fn)=>{
+              fn()
+            })
+            this.oncePool[topic] = []
+          }
+      },
+      once: function(topic,handler){
+        if(this.oncePool[topic]){
+            this.oncePool[topic].push(handler)
+          }else {
+            this.oncePool[topic] = [handler]
+          }
+      }
+    }
+    var fn = function(){
+      console.log('execute...')
+    }
+    var fn1 = function(){
+      console.log('hello world')
+    }
+    var fn2 = function(){
+      console.log('once----execute,and distory')
+    }
+    //测试
+    eventCenter.on('click',fn)//执行两次，后退订不再执行
+    eventCenter.once('click',fn2)//仅执行一次,自动销毁
+    eventCenter.trigger('click')
+    eventCenter.trigger('click')
+    eventCenter.off('click')
+    eventCenter.trigger('click')
+    </script>
+</body>
+</html>
