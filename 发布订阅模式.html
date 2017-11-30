@@ -60,13 +60,50 @@
     var fn2 = function(){
       console.log('once----execute,and distory')
     }
-    //测试
-    eventCenter.on('click',fn)//执行两次，后退订不再执行
-    eventCenter.once('click',fn2)//仅执行一次,自动销毁
-    eventCenter.trigger('click')
-    eventCenter.trigger('click')
-    eventCenter.off('click')
-    eventCenter.trigger('click')
+    // //测试
+    // eventCenter.on('click',fn)//执行两次，后退订不再执行
+    // eventCenter.once('click',fn2)//仅执行一次,自动销毁
+    // eventCenter.trigger('click')
+    // eventCenter.trigger('click')
+    // eventCenter.off('click')
+    // eventCenter.trigger('click')
+
+    //闭包版
+    var app = (function(){
+      let eventPool = {}
+      function on(topic,handler){
+        eventPool[topic] = eventPool[topic] || []
+        eventPool[topic].push({
+          handler:handler
+        })
+      }
+      function trigger(topic,args){
+        if(!eventPool[topic]) return
+        for(let i=0;i<eventPool[topic].length;i++){
+          eventPool[topic][i].handler(args)
+        }
+      }
+      function off(topic,handler){
+        eventPool[topic].forEach((it,inx)=>{
+         if(it.handler === handler){
+          eventPool[topic].splice(inx,1)
+         }
+        })
+      }
+      return {
+        on:on,
+        off:off,
+        trigger:trigger
+      }
+    })()
+    // 测试
+    // var test = function(){
+    //   console.log('test....')
+    // }
+    // app.on('click',test)
+    // app.trigger('click') //仅执行一次
+    // app.off('click',test)
+    // app.trigger('click')
     </script>
 </body>
 </html>
