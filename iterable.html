@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>遍历模式</title>
+</head>
+
+<body>
+  <script>
+    /*
+    *  可遍历模式，与es6中的Symbol配合使用，遍历一个具有next（）方法的可遍历对象。。。
+    *
+    */ 
+        let arr = [1,2,3,4,5]
+    const iterabelMode = ((iterabelObj) => {
+      let index = 0;
+      return {
+        next: () => {
+          index++
+          if (index - 1 === iterabelObj.length) {
+            return {
+              done: true
+            }
+          } else {
+            return {
+              value: iterabelObj[index-1],
+              done: false
+            }
+          }
+        }
+      }
+    })(arr)
+    // const test = iterabelMode(arr)
+    console.log(iterabelMode.next(arr))
+    console.log(iterabelMode.next(arr))
+    console.log(iterabelMode.next(arr))
+    console.log(iterabelMode.next(arr))
+    console.log(iterabelMode.next(arr))
+    console.log(iterabelMode.next(arr))
+  </script>
+</body>
+
+</html>
