@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Observer</title>
+</head>
+
+<body>
+  <input type="text">
+  <div class="test"></div>
+  <script>
+    /*  
+     *   观察者模式：一个subject对象维护一个有n个观察者的队列，当外部state改变时（一般是触发事件，或者ajax？）
+     *   通知所有队列内的观察者作出相应改变。
+     *  api： 一个订阅队列api：排列所有观察者（fn)。 一个通知外部state改变api，后执行队列内所有观察者函数。
+     */
+    const observerMode = (() => {
+      let subject = []
+      return {
+        subscribe: (obverser) => {
+          subject.push(obverser)
+        },
+        notify: (val) => {
+          subject.forEach((fn) => {
+            fn(val)
+          })
+        }
+      }
+    })()
+    observerMode.subscribe((val) => {
+      document.querySelector('.test').innerHTML = val
+    })
+    document.querySelector('input').addEventListener('input', (e) => {
+      let val = e.target.value
+      observerMode.notify(val)
+    })
+  </script>
+</body>
+</html>
