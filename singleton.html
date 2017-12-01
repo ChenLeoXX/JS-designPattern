@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>单列模式</title>
+</head>
+<body>
+  <script>
+   /*
+        单列模式：一个类，仅只有且只能实例化出一个对应实例，且外界不可访问到这个类。 类似于modal，dialog
+          api：一个构造函数，一个供给外部使用的接口，闭包实现。
+    */ 
+    const singletonMode = (()=>{
+      let instance = null
+      let Constructor = ()=>{
+          //code...
+       }
+      return {
+        getInstance: () => {
+          if(instance === null){
+         return  instance = new Constructor()
+       }
+       return instance
+        }
+        //other method...
+      }
+    })()
+    </script>
+</body>
+</html>
